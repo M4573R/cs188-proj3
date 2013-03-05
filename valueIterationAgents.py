@@ -44,13 +44,13 @@ class ValueIterationAgent(ValueEstimationAgent):
         for i in range(self.iterations):
           temp_values = util.Counter()
           for state in self.mdp.getStates():
-            best_value = float('inf')*-1
+            best_value = float('-inf')
             for action in self.mdp.getPossibleActions(state):
               sum_of_values = 0
               for nextState, prob in self.mdp.getTransitionStatesAndProbs(state,action):
-                print("state:"+str(state)+'\t action:'+str(action) + '\t nextState:'+str(nextState)+" ["+str(prob)+"]" +'\t Reward: ' + str(self.mdp.getReward(state,action,nextState)))
+                # print("state:"+str(state)+'\t action:'+str(action) + '\t nextState:'+str(nextState)+" ["+str(prob)+"]" +'\t Reward: ' + str(self.mdp.getReward(state,action,nextState)))
 
-                sum_of_values += prob*((self.mdp.getReward(state,action,nextState)+self.discount*self.values[nextState]))
+                sum_of_values += prob*((self.mdp.getReward(state,action,nextState)+self.discount*self.getValue(nextState)))
               if best_value <= sum_of_values:
                 best_value = sum_of_values
                 temp_values[state] = best_value
@@ -85,7 +85,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         """
         "*** YOUR CODE HERE ***"
         best_action = None
-        best_value = float('inf')*-1
+        best_value = float('-inf')
         for action in self.mdp.getPossibleActions(state):
           if self.computeQValueFromValues(state,action) > best_value:
             best_action = action
