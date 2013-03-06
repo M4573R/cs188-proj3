@@ -120,12 +120,7 @@ class QLearningAgent(ReinforcementAgent):
         bestQVal = float('-inf')
         bestAction = None
         # print("state: "+str(state)+"\taction: "+str(action)+"\tnextState: "+str(nextState)+"\treward: "+str(reward))
-        for nextAction in self.getLegalActions(nextState):
-          if self.getQValue(nextState,nextAction) > bestQVal:
-            bestAction = nextAction
-            bestQVal = self.getQValue(nextState,nextAction)
-          
-        self.qStates[(state,action)] = (1-self.alpha)*self.getQValue(state,action)+self.alpha*(reward+self.discount*self.getQValue(nextState,bestAction))
+        self.qStates[(state,action)] = (1-self.alpha)*self.getQValue(state,action)+self.alpha*(reward+self.discount*self.getQValue(nextState,self.computeActionFromQValues(nextState)))
 
 
         
