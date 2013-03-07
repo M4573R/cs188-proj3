@@ -118,7 +118,6 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         bestQVal = float('-inf')
-        bestAction = None
         # print("state: "+str(state)+"\taction: "+str(action)+"\tnextState: "+str(nextState)+"\treward: "+str(reward))
         self.qStates[(state,action)] = (1-self.alpha)*self.getQValue(state,action)+self.alpha*(reward+self.discount*self.getQValue(nextState,self.computeActionFromQValues(nextState)))
 
@@ -186,7 +185,10 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
-        return self.weights*(self.featExtractor.getFeatures(state,action))
+        if action == None:
+          return 0
+        features = self.featExtractor.getFeatures(state,action)
+        return self.weights*features
 
 
     def update(self, state, action, nextState, reward):
@@ -194,24 +196,14 @@ class ApproximateQAgent(PacmanQAgent):
            Should update your weights based on transition
         """
         "*** YOUR CODE HERE ***"
-
         difference = (reward+self.discount*self.getQValue(nextState,self.computeActionFromQValues(nextState)))-self.getQValue(state,action)
         features = self.featExtractor.getFeatures(state,action)
+        for f in features.keys():
+          # print("feature:"+str(features[f]))
+          # print(self.weights)
+          # print("diff: "+str(difference)+"\talpha: "+str(self.alpha)+"\tfeat: "+ str(features[f]))
+          self.weights[f] = self.getWeights()[f]+(self.alpha*difference*features[f])
 
-        print('\nnew_update')
-        for f in features:
-          print(f)
-        self.weights[(state,action)] = self.weights[(state,action)]+(self.alpha*difference*features[(state,action)])
-
-        
-
-        # newFeatures = util.Counter()
-        # for f in self.featExtractor.getFeatures(state,action):
-        #   newFeatures[f] = self.alpha*difference
-
-        # adjustedFeatures = newFeatures*self.featExtractor.getFeatures(state,action)
-
-        # self.weights=self.weights+newFeatures
 
 
     def final(self, state):
