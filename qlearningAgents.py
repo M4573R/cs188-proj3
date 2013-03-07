@@ -185,9 +185,9 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
-        if action == None:
-          print(state)
-          print(action)
+        # if action == None:
+        #   print(state)
+        #   print(action)
         features= self.featExtractor.getFeatures(state,action)
         return self.weights*features
 
