@@ -119,7 +119,7 @@ class QLearningAgent(ReinforcementAgent):
         "*** YOUR CODE HERE ***"
         bestQVal = float('-inf')
         # print("state: "+str(state)+"\taction: "+str(action)+"\tnextState: "+str(nextState)+"\treward: "+str(reward))
-        self.qStates[(state,action)] = (1-self.alpha)*self.getQValue(state,action)+self.alpha*(reward+self.discount*self.getQValue(nextState,self.computeActionFromQValues(nextState)))
+        self.qStates[(state,action)] = (1-self.alpha)*self.getQValue(state,action)+self.alpha*(reward+self.discount*self.computeValueFromQValues(nextState))
 
 
         
@@ -186,8 +186,9 @@ class ApproximateQAgent(PacmanQAgent):
         """
         "*** YOUR CODE HERE ***"
         if action == None:
-          return 0
-        features = self.featExtractor.getFeatures(state,action)
+          print(state)
+          print(action)
+        features= self.featExtractor.getFeatures(state,action)
         return self.weights*features
 
 
@@ -196,7 +197,7 @@ class ApproximateQAgent(PacmanQAgent):
            Should update your weights based on transition
         """
         "*** YOUR CODE HERE ***"
-        difference = (reward+self.discount*self.getQValue(nextState,self.computeActionFromQValues(nextState)))-self.getQValue(state,action)
+        difference = (reward+self.discount*self.computeValueFromQValues(nextState))-self.getQValue(state,action)
         features = self.featExtractor.getFeatures(state,action)
         for f in features.keys():
           # print("feature:"+str(features[f]))
